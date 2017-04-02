@@ -1,0 +1,45 @@
+#generatorSpecific() 
+#exposeApplicationSpecific() 
+#set ($applicationOF=$configuration.name) 
+#set ($applicationLabel=$formatUtils.getJavaName($applicationOF))
+#set ($first_str=$applicationOF.substring(0,1).toUpperCase())
+#set ($rest_str=$applicationOF.substring(1))
+#set ($applicationNameOF=${first_str} + ${rest_str}) 
+<?xml version="1.0" encoding="UTF-8"?>
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns="http://ofbiz.apache.org/Widget-Form" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+#foreach ($model in $configuration.models())
+#exposeVariableComponentSpecific()
+#foreach ($table in $modelEntities)
+#exposeVariableEntitySpecific()
+#set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
+    <form name="Find$tableClassName" type="single" target="Find$tableClassName" default-entity-name="$tableClassName">
+        <auto-fields-entity entity-name="$tableClassName" default-field-type="find"/>
+        <field name="searchOptions_collapsed"><hidden-value="true"/></field>
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+        <field name="searchButton" widget-style="smallSubmit" title=""><submit/></field>
+    </form>
+    <form name="List${tableClassName}s" type="list" list-name="listIt" paginate-target="Find$tableClassName" default-entity-name="$tableClassName" separate-columns="true"
+        odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <auto-fields-entity entity-name="$tableClassName" default-field-type="display"/>
+        <field name="$primaryKeyVariable" widget-style="linktext" sort-field="false">
+            <hyperlink description="$primaryKeyVariable" target="Edit$tableClassName" also-hidden="false">
+                <parameter param-name="$primaryKeyVariable"/>
+            </hyperlink>
+        </field>
+    </form>
+    <form name="Edit$tableClassName" type="single" target="update$tableClassName" title="" default-map-name="$tableVariableName" default-entity-name="$tableClassName"
+        header-row-style="header-row" default-table-style="basic-table">
+        <alt-target use-when="$tableVariableName==null" target="create$tableClassName"/>
+        <!-- auto-fields-service service-name="update$tableClassName"/ -->
+        <auto-fields-entity entity-name="$tableClassName" default-field-type="edit"/>
+        <field name="submitButton" use-when="$tableVariableName==null" title="${uiLabelMap.CommonCreate}"><submit button-type="button"/></field>
+        <field name="submitButton" use-when="$tableVariableName!=null" title="${uiLabelMap.CommonUpdate}"><submit button-type="button"/></field>
+    </form>
+
+#end
+#end
+
+</forms>

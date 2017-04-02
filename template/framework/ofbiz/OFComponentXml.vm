@@ -1,0 +1,25 @@
+#exposeApplicationSpecific() 
+#set ($applicationOF=$configuration.name) 
+#set ($applicationLabel=$formatUtils.getJavaName($applicationOF))
+#set ($first_str=$applicationOF.substring(0,1).toUpperCase())
+#set ($rest_str=$applicationOF.substring(1))
+#set ($applicationNameOF=${first_str} + ${rest_str}) 
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ofbiz-component name="$applicationOF" enabled="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+    <classpath type="dir" location="config"/>
+
+    <!-- entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/ -->
+    <!-- entity-resource type="data" reader-name="seed" loader="main" location="data/MyPortalSecurityPermissionSeedData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/MyPortalSecurityGroupDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/MyPortalPageDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/MyPortalDemoData.xml"/ -->
+
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+
+    <webapp name="$applicationOF" title="$applicationNameOF" app-bar-display="true" base-permission="OFBTOOLS,WEBTOOLS"
+        server="default-server" location="webapp" mount-point="/$applicationOF"/>
+</ofbiz-component>

@@ -348,6 +348,18 @@
 			</frameworks>
 		</technology>
 
+		<technology name="OFBiz" model-type="rdbms"
+			template-config-file-name="mp-template-config-ofbiz.xml"
+			template-dir="../template/framework/ofbiz"
+			depends-on-targets="BSLA_LIB,JPA2_LIB,CACHE_LIB,COMMON_LIB,LIFERAY_LIB,Cloudbees,CloudFoundry"
+			status="released" comment=""
+			description="Generates OF specific annotations as well as a web site to navigate and manipulate your datamodel.">
+			<frameworks>
+				<framework name="OFBiz" version="16.11.01"></framework>
+			</frameworks>
+			<property name="use-temporal" value="true"></property>
+		</technology>
+
 		<technology name="OpenXava" model-type="rdbms"
 			template-config-file-name="mp-template-config-openxava-last-features.xml"
 			template-dir="../template/framework/openxava"

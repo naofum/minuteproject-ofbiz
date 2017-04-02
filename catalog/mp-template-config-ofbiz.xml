@@ -1,0 +1,133 @@
+<target name="OFBiz">
+	<architecture-target name="ofbiz" description="ofbiz architecture">
+	</architecture-target>	
+    <!-- plugin name="hibernate3" className="net.sf.minuteProject.plugin.hibernate.Hibernate3"></plugin>
+    <plugin name="enrichmentUtils" className="net.sf.minuteProject.utils.enrichment.EnrichmentUtils"></plugin>
+	<plugin name="i18nUtils" className="net.sf.minuteProject.plugin.format.I18nUtils"></plugin>	
+	<plugin name="javaUtils" className="net.sf.minuteProject.utils.java.JavaUtils"></plugin>	
+	<plugin name="entitySecurityUtils" className="net.sf.minuteProject.utils.security.EntitySecurityUtils"/>
+	<plugin name="authorizationUtils" className="net.sf.minuteProject.utils.security.AuthorizationUtils"/>
+	<plugin name="openXavaUtils" className="net.sf.minuteProject.plugin.openxava.OpenXavaUtils"></plugin>
+	<plugin name="presentationUtils" className="net.sf.minuteProject.plugin.presentation.PresentationUtils"></plugin>
+	<plugin name="extensionUtils" className="net.sf.minuteProject.utils.ExtensionUtils"></plugin -->
+	
+	<template-target 
+		name="ofbiz config"
+		outputdir=""
+		belongToPackage="true">
+
+		<template
+			name="OFComponentXml" templateFileName="OFComponentXml.vm" 
+			subdir="" outputsubdir="" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="ofbiz-component" 
+			application-specific="true">
+		</template>	
+		
+		<template
+			name="OFi18nLabel" templateFileName="OFi18nLabel.vm" 
+			subdir="" outputsubdir="config" technicalPackage="" add-model-name="true" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="UiLabels" 
+			application-specific="true">
+		</template>			
+		
+		<template
+			name="OFSimpleMethod" templateFileName="OFSimpleMethod.vm" 
+			subdir="" outputsubdir="script" technicalPackage="" add-model-name="true" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="Services" 
+			application-specific="true">
+		</template>			
+		
+		<template
+			name="OFService" templateFileName="OFService.vm" 
+			subdir="" outputsubdir="servicedef" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="services" 
+			application-specific="true">
+		</template>			
+		
+		<template
+			name="OFData" templateFileName="OFData.vm" 
+			subdir="" outputsubdir="data" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="txt" file-prefix="" file-suffix="data" 
+			application-specific="true">
+		</template>			
+		
+		<template
+			name="OFEntity" templateFileName="OFEntity.vm" 
+			subdir="" outputsubdir="entitydef" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="entitymodel" 
+			application-specific="true">
+		</template>			
+		
+	</template-target>
+	
+	<template-target 
+		name="webapp config"
+		outputdir="webapp"
+		belongToPackage="true">
+		
+		<template 
+			name="OFWebXml" templateFileName="OFWebXml.vm" package-root=""
+			subdir="" outputsubdir="WEB-INF" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="web" 
+			application-specific="true">
+		</template>	
+		
+		<template 
+			name="OFControllerXml" templateFileName="OFControllerXml.vm" package-root=""
+			subdir="" outputsubdir="WEB-INF" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="controller" 
+			application-specific="true">
+		</template>	
+		
+		<template 
+			name="OFindexJsp" templateFileName="OFindexJsp.vm" package-root=""
+			subdir="" outputsubdir="" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="jsp" file-prefix="" file-suffix="index" 
+			application-specific="true">
+		</template>	
+		
+		<template 
+			name="OFErrorJsp" templateFileName="OFErrorJsp.vm" package-root=""
+			subdir="" outputsubdir="error" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="jsp" file-prefix="" file-suffix="error" 
+			application-specific="true">
+		</template>	
+		
+	</template-target> 
+	
+	<template-target 
+		name="widget config"
+		outputdir="widget"
+		belongToPackage="true">
+		
+		<template 
+			name="OFCommonScreensXml" templateFileName="OFCommonScreensXml.vm" package-root=""
+			subdir="" outputsubdir="" technicalPackage="" add-model-name="false" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="CommonScreens" 
+			application-specific="true">
+		</template>	
+		
+		<template 
+			name="OFMenusXml" templateFileName="OFMenusXml.vm" package-root=""
+			subdir="" outputsubdir="" technicalPackage="" add-model-name="true" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="Menus" 
+			application-specific="true">
+		</template>	
+		
+		<template 
+			name="OFScreensXml" templateFileName="OFScreensXml.vm" package-root=""
+			subdir="" outputsubdir="" technicalPackage="" add-model-name="true" add-model-dir-name="false"
+			file-extension="xml" file-prefix="" file-suffix="Screens" 
+			application-specific="true">
+		</template>	
+		
+		<template 
+			name="OFFormsXml" templateFileName="OFFormsXml.vm" package-root=""
+			subdir="" outputsubdir="" technicalPackage="" add-model-name="true" add-model-dir-name="false"
+			file-extension="jsp" file-prefix="" file-suffix="Forms" 
+			application-specific="true">
+		</template>	
+		
+	</template-target> 
+
+</target>

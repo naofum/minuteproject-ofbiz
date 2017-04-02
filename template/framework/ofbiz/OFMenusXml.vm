@@ -1,0 +1,39 @@
+#generatorSpecific() 
+#exposeApplicationSpecific() 
+#set ($applicationOF=$configuration.name) 
+#set ($applicationLabel=$formatUtils.getJavaName($applicationOF))
+#set ($first_str=$applicationOF.substring(0,1).toUpperCase())
+#set ($rest_str=$applicationOF.substring(1))
+#set ($applicationNameOF=${first_str} + ${rest_str}) 
+#set ($D='$')
+<?xml version="1.0" encoding="UTF-8"?>
+
+<menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://ofbiz.apache.org/Widget-Menu" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Menu http://ofbiz.apache.org/dtds/widget-menu.xsd">
+    <menu name="${applicationNameOF}AppBar" title="${D}{uiLabelMap.${applicationNameOF}Application}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+#foreach ($model in $configuration.models())
+#exposeVariableComponentSpecific()
+#foreach ($table in $modelEntities)
+#exposeVariableEntitySpecific()
+#set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
+        <menu-item name="${applicationNameOF}MenuItem" title="${D}{uiLabelMap.Find$applicationNameOF}">
+            <link target="Find${applicationNameOF}"/>
+        </menu-item>
+#end
+#end
+    </menu>
+
+    <menu name="Edit$applicationNameOF" extends="CommonTabBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+        <menu-item name="Edit$applicationNameOF" title="${D}{uiLabelMap.Edit$applicationNameOF}">
+            <link target="Edit$applicationNameOF">
+                <parameter param-name="$primaryKey"/>
+            </link>
+        </menu-item>
+        <menu-item name="Find$applicationNameOF" title="${D}{uiLabelMap.Find$applicationNameOF}">
+            <link target="Find$applicationNameOF">
+                <parameter param-name="$primaryKey"/>
+            </link>
+        </menu-item>
+    </menu>
+
+</menus>

@@ -1,0 +1,74 @@
+#generatorSpecific() 
+#exposeApplicationSpecific() 
+#set ($applicationOF=$configuration.name) 
+#set ($applicationLabel=$formatUtils.getJavaName($applicationOF))
+#set ($first_str=$applicationOF.substring(0,1).toUpperCase())
+#set ($rest_str=$applicationOF.substring(1))
+#set ($applicationNameOF=${first_str} + ${rest_str}) 
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Entity of an Apache OFBiz Component</title>
+    <description>None</description>
+    <version>1.0</version>
+
+#foreach ($model in $configuration.models())
+#exposeVariableComponentSpecific()
+#foreach ($table in $modelEntities)
+#exposeVariableEntitySpecific()
+#set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
+    <!-- ========================================================= -->
+    <!-- $tableClassName -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="$tableClassName" package-name="org.apache.ofbiz.$applicationOF.$tableVariableName">
+#foreach($column in $table.columns)
+#putColumnParams()
+#columnJavaNaming()
+#set($columnLabel=$i18nUtils.getI18nFromDBObject($column))
+#if($columnType == "String")
+#if($isPrimaryKey)
+        <field name="$columnVar" type="id-ne"/>
+#else
+        <field name="$columnVar" type="value"/>
+#end
+#elseif($columnType=="Chr")
+        <field name="$columnVar" type="indicator"/>
+#elseif($columnType=="Clob")
+        <field name="$columnVar" type="very-long"/>
+#elseif($columnType=="Integer")
+        <field name="$columnVar" type="numeric"/>
+#elseif($columnType=="Long")
+        <field name="$columnVar" type="numeric"/>
+#elseif($columnType=="java.math.BigDecimal")
+        <field name="$columnVar" type="fixed-point"/>
+#elseif($columnType=="Timestamp")
+        <field name="$columnVar" type="date-time"/>
+#elseif($columnType=="Date")
+        <field name="$columnVar" type="date"/>
+#elseif($columnType=="Time")
+        <field name="$columnVar" type="time"/>
+#elseif($columnType=="Blob")
+        <field name="$columnVar" type="blob"/>
+#else
+        <field name="$columnVar" type="$columnType"/>
+#end
+#end
+        <prim-key field="$primaryKeyVariable">
+#foreach($reference in $parentReferences)
+#putReferenceParams()
+#columnJavaNaming()
+#set($columnLabel=$i18nUtils.getI18nFromDBObject($column))
+        <!-- relation type="one" fk-name="${column}_fk" rel-entity-name="$linkclass">
+            <key-map field-name="$column"/>
+        </relation -->
+#end
+    </entity>
+#end
+#end
+
+</entitymodel>

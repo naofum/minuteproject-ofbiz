@@ -1,0 +1,45 @@
+#generatorSpecific() 
+#exposeApplicationSpecific() 
+#set ($applicationOF=$configuration.name) 
+#set ($applicationLabel=$formatUtils.getJavaName($applicationOF))
+#set ($first_str=$applicationOF.substring(0,1).toUpperCase())
+#set ($rest_str=$applicationOF.substring(1))
+#set ($applicationNameOF=${first_str} + ${rest_str}) 
+<?xml version="1.0" encoding="UTF-8"?>
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>$applicationNameOF Services</description>
+    <vendor>OFBiz</vendor>
+    <version>1.0</version>
+
+#foreach ($model in $configuration.models())
+#exposeVariableComponentSpecific()
+#foreach ($table in $modelEntities)
+#exposeVariableEntitySpecific()
+#set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
+    <service name="create$tableClassName" default-entity-name="$tableClassName" engine="simple"
+            location="component://$applicationOF/script/${applicationNameOF}Services.xml" invoke="create$tableClassName" auth="true">
+        <description>Create a $tableClassName</description>
+        <!-- permission-service service-name="exampleGenericPermission" main-action="CREATE"/ -->
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="update$tableClassName" default-entity-name="$tableClassName" engine="simple"
+            location="component://$applicationOF/script/${applicationNameOF}Services.xml" invoke="update$tableClassName" auth="true">
+        <description>Update a $tableClassName</description>
+        <!-- permission-service service-name="exampleGenericPermission" main-action="UPDATE"/ -->
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="oldStatusId" type="String" mode="OUT" optional="false"/>
+    </service>
+    <service name="delete$tableClassName" default-entity-name="$tableClassName" engine="simple"
+            location="component://$applicationOF/script/${applicationNameOF}Services.xml" invoke="delete$tableClassName" auth="true">
+        <description>Delete a $tableClassName</description>
+        <!-- permission-service service-name="exampleGenericPermission" main-action="DELETE"/ -->
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+#end
+#end
+
+</services>

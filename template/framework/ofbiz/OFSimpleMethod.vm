@@ -1,0 +1,58 @@
+#generatorSpecific() 
+#exposeApplicationSpecific() 
+#set ($applicationOF=$configuration.name) 
+#set ($applicationLabel=$formatUtils.getJavaName($applicationOF))
+#set ($first_str=$applicationOF.substring(0,1).toUpperCase())
+#set ($rest_str=$applicationOF.substring(1))
+#set ($applicationNameOF=${first_str} + ${rest_str}) 
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Simple-Method" xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+#foreach ($model in $configuration.models())
+#exposeVariableComponentSpecific()
+#foreach ($table in $modelEntities)
+#exposeVariableEntitySpecific()
+#set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
+    <simple-method method-name="create$tableClassName" short-description="create a $tableClassName">
+        <make-value entity-name="$tableClassName" value-field="newEntity"/>
+        <sequenced-id sequence-name="$tableClassName" field="newEntity.$primaryKeyVariable"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <set field="newEntity.statusDate" from-field="nowTimestamp"/>
+        <set field="newEntity.changeByUserLoginId" from-field="userLogin.userLoginId"/>
+        <create-value value-field="newEntity"/>
+    </simple-method>
+    <simple-method method-name="update$tableClassName" short-description="Update a $tableClassName">
+        <entity-one entity-name="$tableClassName" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <set field="lookedUpValue.dateModified" from-field="fromDate"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
+    <simple-method method-name="delete$tableClassName" short-description="Delete a $tableClassName">
+        <entity-one entity-name="$tableClassName" value-field="lookedUpValue"/>
+        <remove-value value-field="lookedUpValue"/>
+    </simple-method>
+#end
+#end
+
+    <simple-method method-name="${applicationOF}GenericPermission" short-description="Main permission logic">
+        <set field="mainAction" from-field="parameters.mainAction"/>
+        <if-empty field="mainAction">
+            <add-error>
+                <fail-property resource="${applicationNameOF}UiLabels" property="${applicationNameOF}PermissionMainActionAttributeMissing"/>
+            </add-error>
+            <check-errors/>
+        </if-empty>
+        <if-has-permission permission="$applicationOF.toUpperCase()" action="_${parameters.mainAction}">
+            <set field="hasPermission" type="Boolean" value="true"/>
+            <field-to-result field="hasPermission"/>
+            <else>
+                <property-to-field resource="${applicationNameOF}UiLabels" property="${applicationNameOF}PermissionError" field="failMessage"/>
+                <set field="hasPermission" type="Boolean" value="false"/>
+                <field-to-result field="hasPermission"/>
+                <field-to-result field="failMessage"/>
+            </else>
+        </if-has-permission>
+    </simple-method>
+</simple-methods>

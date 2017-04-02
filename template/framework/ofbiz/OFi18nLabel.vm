@@ -1,0 +1,36 @@
+#generatorSpecific()
+#set ($updatedAreaI18nBegin=$updatedAreaUtils.getI18nBegin($template, $updatedAreas))
+#set ($updatedAreaI18nEnd=$updatedAreaUtils.getI18nEnd($template, $updatedAreas))
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+$!updatedAreaI18nBegin
+#foreach ($model in $configuration.models())
+#exposeVariableComponentSpecific()
+#foreach ($table in $modelEntities)
+#exposeVariableEntitySpecific()
+#set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
+<!-- $table.name -->
+    <property key="$tableVariableName">
+        <value xml:lang="en">$tableLabel</value>
+    </property>
+    <property key="$tableClassName">
+        <value xml:lang="en">$tableLabel</value>
+    </property>
+##$tableVariableName
+#foreach($column in $table.columns)
+#putColumnParams()
+#columnJavaNaming()
+#set($columnLabel=$i18nUtils.getI18nFromDBObject($column))
+    <property key="$columnVar">
+        <value xml:lang="en">$columnLabel</value>
+    </property>
+    <property key="FormFieldTitle_$columnVar">
+        <value xml:lang="en">$columnLabel</value>
+    </property>
+#end
+#end
+#end
+$!updatedAreaI18nEnd
+
+</resource>
