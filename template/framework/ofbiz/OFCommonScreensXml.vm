@@ -41,7 +41,7 @@
             <widgets>
                 <section>
                     <condition>
-                        <if-has-permission permission="OFBTOOLS,WEBTOOLS" action="_VIEW"/>
+                        <if-has-permission permission="WEBTOOLS" action="_VIEW"/>
                     </condition>
                     <actions>
                         <set field="layoutSettings.javaScripts[]" value="/example/js/ExamplePushNotifications.js" global="true"/>

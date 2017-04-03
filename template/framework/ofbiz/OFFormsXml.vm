@@ -5,6 +5,7 @@
 #set ($first_str=$applicationOF.substring(0,1).toUpperCase())
 #set ($rest_str=$applicationOF.substring(1))
 #set ($applicationNameOF=${first_str} + ${rest_str}) 
+#set ($D='$')
 <?xml version="1.0" encoding="UTF-8"?>
 
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -15,9 +16,9 @@
 #foreach ($table in $modelEntities)
 #exposeVariableEntitySpecific()
 #set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
-    <form name="Find$tableClassName" type="single" target="Find$tableClassName" default-entity-name="$tableClassName">
+    <form name="Find${tableClassName}s" type="single" target="Find$tableClassName" default-entity-name="$tableClassName">
         <auto-fields-entity entity-name="$tableClassName" default-field-type="find"/>
-        <field name="searchOptions_collapsed"><hidden-value="true"/></field>
+        <field name="searchOptions_collapsed"><hidden value="true"/></field>
         <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
         <field name="searchButton" widget-style="smallSubmit" title=""><submit/></field>
     </form>
@@ -25,7 +26,12 @@
         odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
         <auto-fields-entity entity-name="$tableClassName" default-field-type="display"/>
         <field name="$primaryKeyVariable" widget-style="linktext" sort-field="false">
-            <hyperlink description="$primaryKeyVariable" target="Edit$tableClassName" also-hidden="false">
+            <hyperlink description="${D}{groovy:String.valueOf($primaryKeyVariable)}" target="Edit$tableClassName" also-hidden="false">
+                <parameter param-name="$primaryKeyVariable"/>
+            </hyperlink>
+        </field>
+        <field name="deleteLink" title=" " widget-style="smallSubmit">
+            <hyperlink description="${uiLabelMap.CommonDelete}" target="deleteItem" also-hidden="false" confirmation-message="${uiLabelMap.CommonConfirmDelete}" image-location="${iconsLocation}/delete.png">
                 <parameter param-name="$primaryKeyVariable"/>
             </hyperlink>
         </field>
@@ -35,8 +41,14 @@
         <alt-target use-when="$tableVariableName==null" target="create$tableClassName"/>
         <!-- auto-fields-service service-name="update$tableClassName"/ -->
         <auto-fields-entity entity-name="$tableClassName" default-field-type="edit"/>
+        <field name="$primaryKeyVariable" use-when="$tableVariableName!=null" title="${D}{uiLabelMap.$primaryKey}"><display/></field>
+        <field name="$primaryKeyVariable" use-when="$tableVariableName==null @and $primaryKeyVariable==null" title="${D}{uiLabelMap.$primaryKey}"><ignored/></field>
+        <field name="$primaryKeyVariable" use-when="$tableVariableName==null @and $primaryKeyVariable!=null" title="${D}{uiLabelMap.$primaryKey}"><display description="${uiLabelMap.CommonCannotBeFound}: [${D}{$primaryKeyVariable}]" also-hidden="false"/></field>
         <field name="submitButton" use-when="$tableVariableName==null" title="${uiLabelMap.CommonCreate}"><submit button-type="button"/></field>
         <field name="submitButton" use-when="$tableVariableName!=null" title="${uiLabelMap.CommonUpdate}"><submit button-type="button"/></field>
+        <field name="returnButton" widget-style="linktext" title=" ">
+            <hyperlink description="${uiLabelMap.CommonBack}" target="Find$tableClassName" also-hidden="false"/>
+        </field>
     </form>
 
 #end

@@ -15,23 +15,32 @@
 #foreach ($table in $modelEntities)
 #exposeVariableEntitySpecific()
 #set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
-    <simple-method method-name="create$tableClassName" short-description="create a $tableClassName">
+    <simple-method method-name="create$tableClassName" short-description="Create a $tableClassName">
         <make-value entity-name="$tableClassName" value-field="newEntity"/>
-        <sequenced-id sequence-name="$tableClassName" field="newEntity.$primaryKeyVariable"/>
         <set-nonpk-fields map="parameters" value-field="newEntity"/>
-        <set field="newEntity.statusDate" from-field="nowTimestamp"/>
-        <set field="newEntity.changeByUserLoginId" from-field="userLogin.userLoginId"/>
+#if($primaryKeyType=="Long")
+        <sequenced-id sequence-name="$tableClassName" field="$primaryKeyVariable" get-long-only="true"/>
+#elseif($primaryKeyType=="Integer")
+        <sequenced-id sequence-name="$tableClassName" field="$primaryKeyVariable" get-long-only="true"/>
+#else
+        <sequenced-id sequence-name="$tableClassName" field="$primaryKeyVariable"/>
+#end
+        <set from-field="$primaryKeyVariable" field="newEntity.$primaryKeyVariable"/>
+        <field-to-result field="$primaryKeyVariable" result-name="$primaryKeyVariable"/>
         <create-value value-field="newEntity"/>
+        <check-errors/>
     </simple-method>
     <simple-method method-name="update$tableClassName" short-description="Update a $tableClassName">
-        <entity-one entity-name="$tableClassName" value-field="lookedUpValue"/>
-        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
-        <set field="lookedUpValue.dateModified" from-field="fromDate"/>
-        <store-value value-field="lookedUpValue"/>
+        <entity-one entity-name="$tableClassName" value-field="$tableVariableName" auto-field-map="true"/>
+        <check-errors/>
+        <set-nonpk-fields map="parameters" value-field="$tableVariableName"/>
+        <store-value value-field="$tableVariableName"/>
+        <check-errors/>
     </simple-method>
     <simple-method method-name="delete$tableClassName" short-description="Delete a $tableClassName">
-        <entity-one entity-name="$tableClassName" value-field="lookedUpValue"/>
-        <remove-value value-field="lookedUpValue"/>
+        <entity-one entity-name="$tableClassName" value-field="$tableVariableName" auto-field-map="true"/>
+        <check-errors/>
+        <remove-value value-field="$tableVariableName"/>
     </simple-method>
 #end
 #end

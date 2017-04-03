@@ -31,7 +31,6 @@
         <!-- permission-service service-name="exampleGenericPermission" main-action="UPDATE"/ -->
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
-        <attribute name="oldStatusId" type="String" mode="OUT" optional="false"/>
     </service>
     <service name="delete$tableClassName" default-entity-name="$tableClassName" engine="simple"
             location="component://$applicationOF/script/${applicationNameOF}Services.xml" invoke="delete$tableClassName" auth="true">

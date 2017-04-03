@@ -11,6 +11,14 @@
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
+    <screen name="main">
+        <section>
+            <widgets>
+                <label text=" "/>
+            </widgets>
+        </section>
+    </screen>
+
 #foreach ($model in $configuration.models())
 #exposeVariableComponentSpecific()
 #foreach ($table in $modelEntities)
@@ -21,33 +29,33 @@
             <actions>
                 <set field="headerItem" value="${tableClassName}MenuItem"/>
                 <set field="titleProperty" value="PageTitleFind$tableClassName"/>
-                <set entity-condition entity-name="$tableClassName" list="listIt"/>
+                <entity-condition entity-name="$tableClassName" list="listIt"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
                         <section>
                             <condition>
-                                <if-has-permission permission="OFBTOOLS,WEBTOOLS" action="_VIEW"/>
+                                <if-has-permission permission="WEBTOOLS" action="_VIEW"/>
                             </condition>
                             <widgets>
                                 <decorator-screen name="FindScreenDecorator" location="component://common/widget/CommonScreens.xml">
                                     <decorator-section name="menu-bar">
                                         <container style="button-bar">
-                                            <link target="Edit$tableClassName" text="${uiLabelMap.NewCreate}" style="buttontext create">
+                                            <link target="Edit$tableClassName" text="${uiLabelMap.CreateNew}" style="buttontext create">
                                                 <image url-mode="raw" src="${iconsLocation}/add.png"/>
                                             </link>
                                             <link target="${tableClassName}ReportXls" text="${uiLabelMap.CommonViewAsXls}" style="buttontext">
                                                 <image url-mode="raw" src="${iconsLocation}/page_white_excel.png"/>
-                                                <parameter param-name="$primaryKeyVariable"/>
+                                                <!-- parameter param-name="$primaryKeyVariable"/ -->
                                             </link>
                                         </container>
                                     </decorator-section>
                                     <decorator-section name="search-options">
-                                        <include-form name="Find${tableClassName}s" location="component://$applicationOF/${applicationNameOF}Forms.xml"/>
+                                        <include-form name="Find${tableClassName}s" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/>
                                     </decorator-section>
                                     <decorator-section name="search-results">
-                                        <include-form name="List${tableClassName}s" location="component://$applicationOF/${applicationNameOF}Forms.xml"/>
+                                        <include-form name="List${tableClassName}s" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/>
                                     </decorator-section>
                                 </decorator-screen>
                             </widgets>
@@ -57,47 +65,6 @@
                         </section>
                     </decorator-section>
                 </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="ListExampleExport">
-        <section>
-            <widgets>
-                <decorator-screen name="SimpleDecorator" location="${parameters.mainDecoratorLocation}">
-                    <decorator-section name="body">
-                        <section>
-                            <condition>
-                                <if-has-permission permission="EXAMPLE" action="_VIEW"/>
-                            </condition>
-                            <actions>
-                                <set field="exampleCtx" from-field="parameters"/>
-                            </actions>
-                            <widgets>
-                                <include-form name="ListExampleExport" location="component://example/widget/example/ExampleForms.xml"/>
-                            </widgets>
-                            <fail-widgets>
-                                <label style="h3">${uiLabelMap.ExampleViewPermissionError}</label>
-                            </fail-widgets>
-                        </section>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="EditExampleLayer">
-        <section>
-            <actions>
-                <property-map resource="ExampleUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-                <set field="titleProperty" value="PageTitleEditExample"/>
-                <set field="tabButtonItem" value="EditExample"/>
-                <set field="exampleId" from-field="parameters.exampleId"/>
-                <entity-one entity-name="Example" value-field="example"/>
-            </actions>
-            <widgets>
-                <include-form name="EditExample" location="component://example/widget/example/ExampleForms.xml"/>
             </widgets>
         </section>
     </screen>
@@ -118,23 +85,23 @@
                         <!-- include-form name="Edit$tableClassName" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/ -->
                         <section>
                             <condition>
-                                <not><if-empty field="$tableVariableName"></not>
+                                <not><if-empty field="$tableVariableName"/></not>
                             </condition>
+                            <widgets>
+                                <container style="button-bar">
+                                </container>
+                                <label style="h1" text="${D}{uiLabelMap.Edit$tableClassName}"/>
+                                <screenlet id="Edit$tableClassName" collapsible="false">
+                                    <include-form name="Edit$tableClassName" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/>
+                                </screenlet>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h1" text="${D}{uiLabelMap.CreateNew$tableClassName}"/>
+                                <screenlet id="Edit$tableClassName" collapsible="false">
+                                    <include-form name="Edit$tableClassName" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/>
+                                </screenlet>
+                            </fail-widgets>
                         </section>
-                        <widgets>
-                            <container style="button-bar">
-                            </container>
-                            <label style="h1" text="${D}{uiLabelMap.Edit$tableClassName}"/>
-                            <screenlet id="Edit$tableClassName" collapsible="false">
-                                <include-form name="Edit$tableClassName" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/>
-                            </screenlet>
-                        </widgets>
-                        <fail-widgets>
-                            <label style="h1" text="${D}{uiLabelMap.CreateNew$tableClassName}"/>
-                            <screenlet id="Edit$tableClassName" collapsible="false">
-                                <include-form name="Edit$tableClassName" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/>
-                            </screenlet>
-                        </fail-widgets>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -142,6 +109,24 @@
     </screen>
 
     <screen name="${tableClassName}Report">
+        <section>
+            <actions>
+                <property-map resource="${applicationNameOF}UiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="titleProperty" value="PageTitleList$tableClassName"/>
+                <set field="tabButtonItem" value="List$tableClassName"/>
+                <entity-condition entity-name="$tableClassName" list="listIt"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="SimpleDecorator" location="component://common/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <include-form name="List$tableClassName" location="component://$applicationOF/widget/${applicationNameOF}Forms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- screen name="${tableClassName}Report">
         <section>
             <actions>
                 <property-map resource="${applicationNameOF}UiLabels" map-name="uiLabelMap" global="true"/>
@@ -158,7 +143,7 @@
                 </decorator-screen>
             </widgets>
         </section>
-    </screen>
+    </screen -->
 
 #end
 #end

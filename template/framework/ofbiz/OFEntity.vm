@@ -58,7 +58,7 @@
         <field name="$columnVar" type="$columnType"/>
 #end
 #end
-        <prim-key field="$primaryKeyVariable">
+        <prim-key field="$primaryKeyVariable"/>
 #foreach($reference in $parentReferences)
 #putReferenceParams()
 #columnJavaNaming()

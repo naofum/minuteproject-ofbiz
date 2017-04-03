@@ -124,7 +124,7 @@
 		<template 
 			name="OFFormsXml" templateFileName="OFFormsXml.vm" package-root=""
 			subdir="" outputsubdir="" technicalPackage="" add-model-name="true" add-model-dir-name="false"
-			file-extension="jsp" file-prefix="" file-suffix="Forms" 
+			file-extension="xml" file-prefix="" file-suffix="Forms" 
 			application-specific="true">
 		</template>	
 		

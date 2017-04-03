@@ -16,8 +16,8 @@
 #foreach ($table in $modelEntities)
 #exposeVariableEntitySpecific()
 #set($tableLabel=$i18nUtils.getI18nFromDBObject($table))
-        <menu-item name="${applicationNameOF}MenuItem" title="${D}{uiLabelMap.Find$applicationNameOF}">
-            <link target="Find${applicationNameOF}"/>
+        <menu-item name="${tableClassName}MenuItem" title="${D}{uiLabelMap.Find$tableClassName}">
+            <link target="Find${tableClassName}"/>
         </menu-item>
 #end
 #end
